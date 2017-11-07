@@ -9,7 +9,7 @@ Elixir library for signing and validating requests
 ```elixir
 def deps do
   [
-    {:hm_crypto, git: "git@github.com:heathmont/hm-crypto.git", tag: "0.1.0"}
+    {:hm_crypto, git: "git@github.com:heathmont/hm-crypto.git", tag: "v0.1.0"}
   ]
 end
 ```

@@ -22,4 +22,8 @@ defmodule HmCryptoTest do
     assert true == HmCrypto.valid?("message", signature, digest_type, public)
     assert false == HmCrypto.valid?("invalid message", signature, digest_type, public)
   end
+
+  test "HmCrypto.valid? returns false when signature is not base64 string" do
+    assert false == HmCrypto.valid?("message", "not base64 string")
+  end
 end

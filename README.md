@@ -9,7 +9,7 @@ Elixir library for signing and validating requests
 ```elixir
 def deps do
   [
-    {:hm_crypto, git: "git@github.com:heathmont/hm-crypto.git", tag: "v0.1.0"}
+    {:hm_crypto, git: "git@github.com:heathmont/hm-crypto.git", tag: "v0.1.1"}
   ]
 end
 ```
@@ -28,6 +28,8 @@ config :hm_crypto,
 Availiable digest types (see rsa_digest_type() in [docs](http://erlang.org/doc/man/public_key.html)) is md5, ripemd160, sha, sha224, sha256, sha384, sha512.
 
 ## Usage
+
+`HmCrypto.sign!` returns base64 string. `HmCrypto.valid?` returns false if signature is not base64 string.
 
 Sign and validate with default keypair:
 

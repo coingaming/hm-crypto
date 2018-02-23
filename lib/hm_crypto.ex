@@ -21,7 +21,7 @@ defmodule HmCrypto do
   def valid?(message, encoded_signature, digest_type \\ @default_digest_type,
              public_key \\ @default_public_key)
       when is_binary(message) do
-    case Base.decode64(encoded_signature) do
+    case Base.decode64(encoded_signature, ignore: :whitespace) do
       {:ok, signature} ->
         :public_key.verify(message, digest_type, signature, parse_pem(public_key))
       _ -> false

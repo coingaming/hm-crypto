@@ -4,13 +4,12 @@ defmodule HmCrypto.PublicKeyTest do
 
   setup do
     %{
-      public_key:   File.read!("#{:code.priv_dir(:hm_crypto)}/demo_pub.pem"),
-      private_key:  File.read!("#{:code.priv_dir(:hm_crypto)}/demo_priv.pem"),
+      public_key: File.read!("#{:code.priv_dir(:hm_crypto)}/demo_pub.pem"),
+      private_key: File.read!("#{:code.priv_dir(:hm_crypto)}/demo_priv.pem")
     }
   end
 
   test "parse_pem", %{public_key: public_key, private_key: private_key} do
-
     parsed_public_key = HmCrypto.PublicKey.parse_pem(public_key)
     parsed_private_key = HmCrypto.PublicKey.parse_pem(private_key)
 
@@ -19,7 +18,5 @@ defmodule HmCrypto.PublicKeyTest do
 
     assert parsed_public_key == HmCrypto.PublicKey.parse_pem(parsed_public_key)
     assert parsed_private_key == HmCrypto.PublicKey.parse_pem(parsed_private_key)
-
   end
-
 end

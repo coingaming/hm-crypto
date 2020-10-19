@@ -5,13 +5,6 @@
   },
   "skip_files": [
     "bench/*",
-    "test/*",
-
-    "lib/hm_crypto_web.ex",
-    "lib/hm_crypto/application.ex",
-    "lib/hm_crypto/repo.ex",
-
-    "lib/hm_crypto_web/endpoint.ex",
-    "lib/hm_crypto_web/router.ex"
+    "test/*"
   ]
 }

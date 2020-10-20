@@ -43,13 +43,12 @@ defmodule HmCrypto do
   """
 
   @spec sign!(binary(), rsa_digest_type(), HmCrypto.PublicKey.rsa_key()) :: binary()
-  def sign!(payload, digest_type, private_key) when
-        is_binary(payload) and
-        (digest_type in @rsa_digest_type_list) do
-
+  def sign!(payload, digest_type, private_key)
+      when is_binary(payload) and
+             digest_type in @rsa_digest_type_list do
     payload
     |> :public_key.sign(digest_type, parse_pem(private_key))
-    |> Base.encode64
+    |> Base.encode64()
   end
 
   @doc """
@@ -68,19 +67,18 @@ defmodule HmCrypto do
   """
 
   @spec valid?(binary(), binary(), rsa_digest_type(), HmCrypto.PublicKey.rsa_key()) :: boolean()
-  def valid?(payload, encoded_signature, digest_type, public_key) when
-        is_binary(payload) and
-        is_binary(encoded_signature) and
-        (digest_type in @rsa_digest_type_list) do
-
+  def valid?(payload, encoded_signature, digest_type, public_key)
+      when is_binary(payload) and
+             is_binary(encoded_signature) and
+             digest_type in @rsa_digest_type_list do
     encoded_signature
     |> Base.decode64(ignore: :whitespace)
     |> case do
       {:ok, signature} ->
         :public_key.verify(payload, digest_type, signature, parse_pem(public_key))
+
       _ ->
         false
     end
   end
-
 end

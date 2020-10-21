@@ -4,7 +4,7 @@ defmodule HmCrypto.EcUtils.ECPrivateKey do
   Record.defrecord(
     :record,
     :ECPrivateKey,
-    Record.extract(:ECPrivateKey, from_lib: "public_key/include/OTP-PUB-kEY.hrl")
+    Record.extract(:ECPrivateKey, from_lib: "public_key/include/OTP-PUB-KEY.hrl")
   )
 
   @type t ::

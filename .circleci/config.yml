@@ -96,18 +96,21 @@ workflows:
   test:
     jobs:
       - test:
+          context: global
           filters:
             branches:
               only: /^.+$/
   test-doc:
     jobs:
       - test:
+          context: global
           filters:
             tags:
               only: /.*/
             branches:
               only: /^master$/
       - doc:
+          context: global
           filters:
             tags:
               only: /.*/

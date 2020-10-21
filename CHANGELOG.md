@@ -1,5 +1,13 @@
 # Change Log
 
+## [v0.2.0](https://github.com/coingaming/hm-crypto/tree/v0.2.0) (2020-10-21)
+[Full Changelog](https://github.com/coingaming/hm-crypto/compare/v0.1.3...v0.2.0)
+
+**Merged pull requests:**
+
+- Fix CircleCI build [\#8](https://github.com/coingaming/hm-crypto/pull/8) ([ischepin](https://github.com/ischepin))
+- Add EC keys util functions [\#7](https://github.com/coingaming/hm-crypto/pull/7) ([ischepin](https://github.com/ischepin))
+
 ## [v0.1.3](https://github.com/coingaming/hm-crypto/tree/v0.1.3) (2018-05-15)
 [Full Changelog](https://github.com/coingaming/hm-crypto/compare/v0.1.1...v0.1.3)
 

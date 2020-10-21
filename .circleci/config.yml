@@ -25,6 +25,9 @@ jobs:
             - v1-deps-cache-{{ checksum "mix.lock" }}
             - v1-deps-cache
       - run:
+          name: Use most recent version of hex
+          command: mix local.hex
+      - run:
           name:       Fetch dependencies
           command:    mix deps.get
       - run:
@@ -78,6 +81,9 @@ jobs:
       - run:
           name:       Fetch submodules
           command:    git submodule update --init --recursive
+      - run:
+          name: Use most recent version of hex
+          command: mix local.hex
       - run:
           name:       Fetching dependencies
           command:    mix deps.get

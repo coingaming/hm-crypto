@@ -128,11 +128,7 @@
 
         # Deprecated checks (these will be deleted after a grace period)
         #
-        {Credo.Check.Readability.Specs, false},
-        {Credo.Check.Warning.NameRedeclarationByAssignment, false},
-        {Credo.Check.Warning.NameRedeclarationByCase, priority: :normal},
-        {Credo.Check.Warning.NameRedeclarationByDef, priority: :normal},
-        {Credo.Check.Warning.NameRedeclarationByFn, priority: :normal}
+        {Credo.Check.Readability.Specs, false}
 
         # Custom checks can be created using `mix credo.gen.check`.
         #

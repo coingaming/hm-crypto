@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-    - image: tim2cf/elixir-builder:1.6
+    - image: heathmont/elixir-ci:1.10.2-alpine
 
 version: 2
 jobs:
@@ -13,7 +13,7 @@ jobs:
           command:    ./scripts/check-vars.sh "in system" "ROBOT_SSH_KEY" "COVERALLS_REPO_TOKEN"
       - run:
           name:       Setup robot SSH key
-          command:    echo "$ROBOT_SSH_KEY" | base64 --decode > $HOME/.ssh/id_rsa.robot && chmod 600 $HOME/.ssh/id_rsa.robot && ssh-add $HOME/.ssh/id_rsa.robot
+          command:    echo "$ROBOT_SSH_KEY" | base64 -d > $HOME/.ssh/id_rsa.robot && chmod 600 $HOME/.ssh/id_rsa.robot && ssh-add $HOME/.ssh/id_rsa.robot
       - run:
          name:        Setup SSH config
          command:     echo -e "Host *\n IdentityFile $HOME/.ssh/id_rsa.robot\n IdentitiesOnly yes" > $HOME/.ssh/config
@@ -24,6 +24,9 @@ jobs:
           keys:
             - v1-deps-cache-{{ checksum "mix.lock" }}
             - v1-deps-cache
+      - run:
+          name: Use most recent version of hex
+          command: mix local.hex --force
       - run:
           name:       Fetch dependencies
           command:    mix deps.get
@@ -68,16 +71,19 @@ jobs:
       - checkout
       - run:
           name:       Check variables
-          command:    ./scripts/check-vars.sh "in system" "ROBOT_SSH_KEY" "CONFLUENCE_SECRET"
+          command:    ./scripts/check-vars.sh "in system" "ROBOT_SSH_KEY"
       - run:
           name:       Setup robot SSH key
-          command:    echo "$ROBOT_SSH_KEY" | base64 --decode > $HOME/.ssh/id_rsa.robot && chmod 600 $HOME/.ssh/id_rsa.robot && ssh-add $HOME/.ssh/id_rsa.robot
+          command:    echo "$ROBOT_SSH_KEY" | base64 -d > $HOME/.ssh/id_rsa.robot && chmod 600 $HOME/.ssh/id_rsa.robot && ssh-add $HOME/.ssh/id_rsa.robot
       - run:
          name:        Setup SSH config
          command:     echo -e "Host *\n IdentityFile $HOME/.ssh/id_rsa.robot\n IdentitiesOnly yes" > $HOME/.ssh/config
       - run:
           name:       Fetch submodules
           command:    git submodule update --init --recursive
+      - run:
+          name: Use most recent version of hex
+          command: mix local.hex --force
       - run:
           name:       Fetching dependencies
           command:    mix deps.get
@@ -87,27 +93,27 @@ jobs:
       - run:
           name:       Compile documentation
           command:    mix docs
-      - run:
-          name:       Push documentation to confluence
-          command:    export $(cat "./scripts/.env" | xargs) && mix boilex.ci.confluence.push "$CIRCLE_TAG"
 
 workflows:
   version: 2
   test:
     jobs:
       - test:
+          context: global
           filters:
             branches:
               only: /^.+$/
   test-doc:
     jobs:
       - test:
+          context: global
           filters:
             tags:
               only: /.*/
             branches:
               only: /^master$/
       - doc:
+          context: global
           filters:
             tags:
               only: /.*/

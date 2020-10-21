@@ -20,7 +20,8 @@ erl_crash.dump
 *.ez
 
 # Dialyzer generated plt files
-plts/
+/plts/*.plt
+/plts/*.plt.hash
 
 /bench/graphs/
 /bench/snapshots/

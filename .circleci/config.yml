@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-    - image: tim2cf/elixir-builder:1.6
+    - image: heathmont/elixir-ci:1.10.2-alpine
 
 version: 2
 jobs:
@@ -68,7 +68,7 @@ jobs:
       - checkout
       - run:
           name:       Check variables
-          command:    ./scripts/check-vars.sh "in system" "ROBOT_SSH_KEY" "CONFLUENCE_SECRET"
+          command:    ./scripts/check-vars.sh "in system" "ROBOT_SSH_KEY"
       - run:
           name:       Setup robot SSH key
           command:    echo "$ROBOT_SSH_KEY" | base64 --decode > $HOME/.ssh/id_rsa.robot && chmod 600 $HOME/.ssh/id_rsa.robot && ssh-add $HOME/.ssh/id_rsa.robot
@@ -87,9 +87,6 @@ jobs:
       - run:
           name:       Compile documentation
           command:    mix docs
-      - run:
-          name:       Push documentation to confluence
-          command:    export $(cat "./scripts/.env" | xargs) && mix boilex.ci.confluence.push "$CIRCLE_TAG"
 
 workflows:
   version: 2

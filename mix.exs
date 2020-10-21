@@ -22,7 +22,11 @@ defmodule HmCrypto.Mixfile do
         "coveralls.html": :test
       ],
       # dialyxir
-      dialyzer: [ignore_warnings: ".dialyzer_ignore", plt_add_apps: [:public_key], plt_file: {:no_warn, "plts/dialyzer.plt"}],
+      dialyzer: [
+        ignore_warnings: ".dialyzer_ignore",
+        plt_add_apps: [:public_key],
+        plt_file: {:no_warn, "plts/dialyzer.plt"}
+      ],
       # ex_doc
       name: "HmCrypto",
       source_url: "https://github.com/heathmont/hm-crypto",

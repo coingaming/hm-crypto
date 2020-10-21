@@ -1,3 +1,5 @@
 Any dialyzer's error output lines putted to this text file will be completely ignored by dialyzer's type checks.
 Please not abuse this file, type checks are VERY important.
 Use this file just in case of bad 3rd party auto-generated code.
+bench/support/helper.ex:16: Function 'MACRO-generate_benchmarks'/2 has no local return
+bench/support/helper.ex:51: Fun application will fail since _lambda@1 :: atom() | [any()] | number() | {_,_,_,_} is not a function of arity 1

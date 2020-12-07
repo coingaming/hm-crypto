@@ -1,4 +1,14 @@
 defmodule HmCrypto.PublicKey do
+  require Record
+
+  Record.defrecord(
+    :record,
+    :RSAPublicKey,
+    Record.extract(:RSAPublicKey, from_lib: "public_key/include/public_key.hrl")
+  )
+
+  @type t :: record(:record, modulus: number(), publicExponent: number())
+
   @type rsa_key :: binary() | tuple()
 
   @moduledoc """

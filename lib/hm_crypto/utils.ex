@@ -18,7 +18,7 @@ defmodule HmCrypto.Utils do
   def public_key_from_private_key(private_key) when is_tuple(private_key) do
     public_modulus = elem(private_key, 2)
     public_exponent = elem(private_key, 3)
-    {:RSAPublicKey, public_modulus, public_exponent}
+    HmCrypto.PublicKey.record(modulus: public_modulus, publicExponent: public_exponent)
   end
 
   def public_key_from_private_key(private_key) when is_binary(private_key) do

@@ -7,7 +7,7 @@ defmodule HmCrypto.PublicKey do
     Record.extract(:RSAPublicKey, from_lib: "public_key/include/public_key.hrl")
   )
 
-  @type t :: record(:record, modulus: number(), publicExponent: number())
+  @type t :: record(:record, modulus: pos_integer(), publicExponent: pos_integer())
 
   @type rsa_key :: binary() | tuple()
 

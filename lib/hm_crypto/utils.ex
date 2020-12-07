@@ -14,7 +14,7 @@ defmodule HmCrypto.Utils do
 
   """
 
-  @spec public_key_from_private_key(HmCrypto.PublicKey.rsa_key()) :: tuple()
+  @spec public_key_from_private_key(HmCrypto.PublicKey.rsa_key()) :: HmCrypto.PublicKey.t()
   def public_key_from_private_key(private_key) when is_tuple(private_key) do
     public_modulus = elem(private_key, 2)
     public_exponent = elem(private_key, 3)

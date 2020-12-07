@@ -1,6 +1,6 @@
-defmodule HmCrypto.UtilsTest do
+defmodule HmCrypto.RsaUtilsTest do
   use ExUnit.Case
-  doctest HmCrypto.Utils
+  doctest HmCrypto.RsaUtils
 
   setup do
     %{
@@ -13,7 +13,7 @@ defmodule HmCrypto.UtilsTest do
     parsed_public_key = HmCrypto.PublicKey.parse_pem(public_key)
     parsed_private_key = HmCrypto.PublicKey.parse_pem(private_key)
 
-    assert HmCrypto.Utils.public_key_from_private_key(parsed_private_key) == parsed_public_key
-    assert HmCrypto.Utils.public_key_from_private_key(private_key) == parsed_public_key
+    assert HmCrypto.RsaUtils.public_key_from_private_key(parsed_private_key) == parsed_public_key
+    assert HmCrypto.RsaUtils.public_key_from_private_key(private_key) == parsed_public_key
   end
 end

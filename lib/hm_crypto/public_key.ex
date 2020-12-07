@@ -33,7 +33,7 @@ defmodule HmCrypto.PublicKey do
   def encode_pem(rsa_key) when is_tuple(rsa_key) do
     key_type = elem(rsa_key, 0)
     pem_entry = :public_key.pem_entry_encode(key_type, rsa_key)
-    :public_key.pem_encode([pem_entry]) |> String.trim_trailing("\n")
+    :public_key.pem_encode([pem_entry])
   end
 
   def encode_pem(rsa_key) when is_binary(rsa_key), do: rsa_key

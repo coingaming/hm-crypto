@@ -27,4 +27,27 @@ defmodule HmCrypto.RsaUtils do
     |> HmCrypto.PublicKey.parse_pem()
     |> public_key_from_private_key()
   end
+
+  @doc """
+
+  Function encodes tuple representation of RSA key to PEM format (string).
+  If string is given as argument - returns it as is.
+
+  """
+
+  @spec encode_pem(RsaPrivateKey.t() | RsaPublicKey.t() | String.t()) :: String.t()
+  def encode_pem(RsaPublicKey.record() = rsa_key) do
+    to_pem(RsaPublicKey.key_type(), rsa_key)
+  end
+
+  def encode_pem(RsaPrivateKey.record() = rsa_key) do
+    to_pem(RsaPrivateKey.key_type(), rsa_key)
+  end
+
+  def encode_pem(rsa_key) when is_binary(rsa_key), do: rsa_key
+
+  defp to_pem(key_type, rsa_key) do
+    pem_entry = [:public_key.pem_entry_encode(key_type, rsa_key)]
+    :public_key.pem_encode(pem_entry)
+  end
 end

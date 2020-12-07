@@ -19,21 +19,4 @@ defmodule HmCrypto.PublicKeyTest do
     assert parsed_public_key == HmCrypto.PublicKey.parse_pem(parsed_public_key)
     assert parsed_private_key == HmCrypto.PublicKey.parse_pem(parsed_private_key)
   end
-
-  test "encode_pem", %{public_key: public_key, private_key: private_key} do
-    parsed_public_key = HmCrypto.PublicKey.parse_pem(public_key)
-    parsed_private_key = HmCrypto.PublicKey.parse_pem(private_key)
-
-    encoded_public_key = HmCrypto.PublicKey.encode_pem(parsed_public_key)
-    encoded_private_key = HmCrypto.PublicKey.encode_pem(parsed_private_key)
-
-    assert encoded_public_key |> is_binary
-    assert encoded_private_key |> is_binary
-
-    assert parsed_public_key == HmCrypto.PublicKey.parse_pem(encoded_public_key)
-    assert parsed_private_key == HmCrypto.PublicKey.parse_pem(encoded_private_key)
-
-    encoded_private_key = HmCrypto.PublicKey.encode_pem(private_key)
-    assert parsed_private_key == HmCrypto.PublicKey.parse_pem(encoded_private_key)
-  end
 end

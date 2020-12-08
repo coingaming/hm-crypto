@@ -15,7 +15,7 @@ defmodule HmCrypto.RsaUtils do
 
   """
 
-  @spec public_key_from_private_key(RsaPrivateKey.t()) :: RsaPublicKey.t()
+  @spec public_key_from_private_key(RsaPrivateKey.t() | String.t()) :: RsaPublicKey.t()
   def public_key_from_private_key(
         RsaPrivateKey.record(modulus: modulus, publicExponent: public_exponent)
       ) do

@@ -62,7 +62,7 @@ defmodule HmCrypto.Mixfile do
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.19", only: [:dev, :test], runtime: false},
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
-      {:boilex, "~> 0.1.6", only: [:dev, :test], runtime: false}
+      {:boilex, "~> 0.2.1", only: [:dev, :test], runtime: false}
     ]
   end
 

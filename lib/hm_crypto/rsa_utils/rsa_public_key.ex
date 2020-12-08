@@ -2,6 +2,7 @@ defmodule HmCrypto.RsaUtils.RsaPublicKey do
   require Record
   @key_type :RSAPublicKey
 
+  @spec key_type :: :RSAPublicKey
   defmacro key_type, do: @key_type
 
   Record.defrecord(

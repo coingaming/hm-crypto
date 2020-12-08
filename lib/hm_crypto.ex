@@ -42,7 +42,7 @@ defmodule HmCrypto do
 
   """
 
-  @spec sign!(binary(), rsa_digest_type(), HmCrypto.PublicKey.rsa_key()) :: binary()
+  @spec sign!(binary(), rsa_digest_type(), HmCrypto.PublicKey.key()) :: binary()
   def sign!(payload, digest_type, private_key)
       when is_binary(payload) and
              digest_type in @rsa_digest_type_list do
@@ -66,7 +66,7 @@ defmodule HmCrypto do
 
   """
 
-  @spec valid?(binary(), binary(), rsa_digest_type(), HmCrypto.PublicKey.rsa_key()) :: boolean()
+  @spec valid?(binary(), binary(), rsa_digest_type(), HmCrypto.PublicKey.key()) :: boolean()
   def valid?(payload, encoded_signature, digest_type, public_key)
       when is_binary(payload) and
              is_binary(encoded_signature) and

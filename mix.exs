@@ -36,6 +36,7 @@ defmodule HmCrypto.Mixfile do
       description: "Elixir library for signing and validating requests",
       package: [
         licenses: ["Apache 2.0"],
+        organization: "coingaming",
         files: ["lib", "priv", "mix.exs", "README*", "VERSION*"],
         maintainers: ["tim2CF", "nazipov", "ysemeniuk"],
         links: %{
@@ -60,7 +61,7 @@ defmodule HmCrypto.Mixfile do
       {:benchfella, "~> 0.3.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.13", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.19", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.23", only: [:dev, :test], runtime: false},
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
       {:boilex, "~> 0.2.1", only: [:dev, :test], runtime: false}
     ]

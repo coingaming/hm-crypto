@@ -54,6 +54,29 @@ defmodule HmCrypto.EcUtils do
   end
 
   @doc """
+    Convert :crypto representation of EC private key (binary) to der encoded representation (binary).
+    Curve must be provided explicitly since :crypto key format doesn't carry this information.
+
+    ## Examples
+
+      iex> {public, private} = HmCrypto.EcUtils.generate_keypair(:secp256k1)
+      iex> HmCrypto.EcUtils.crypto_privkey_to_der(private, public, :secp256k1)
+  """
+  @spec crypto_privkey_to_der(crypto_privkey :: binary(), crypto_pubkey :: binary(), curve :: atom()) ::
+          binary()
+  def crypto_privkey_to_der(crypto_privkey, crypto_pubkey, curve) do
+    key_info =
+      ECPrivateKey.record(
+        privateKey: crypto_privkey,
+        version: 1,
+        parameters: {:namedCurve, :pubkey_cert_records.namedCurves(curve)},
+        publicKey: crypto_pubkey
+      )
+
+    :public_key.der_encode(:ECPrivateKey, key_info)
+  end
+
+  @doc """
     Convert DER representation of EC public key (binary) to :crypto encoded representation {binary, curve_type}.
 
     ## Examples

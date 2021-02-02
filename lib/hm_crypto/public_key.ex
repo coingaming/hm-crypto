@@ -5,13 +5,13 @@ defmodule HmCrypto.PublicKey do
 
   @moduledoc """
 
-  API to work with RSA keys.
+  API to work with PEM encoded keys.
 
   """
 
   @doc """
 
-  Function parses binary (string) representation of RSA key to Erlang format (tuple).
+  Function parses binary (string) representation of PEM encoded key to Erlang format (tuple).
   If tuple is given as argument - returns it as is.
 
   """

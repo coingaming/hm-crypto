@@ -1,9 +1,9 @@
 defmodule HmCrypto do
   import HmCrypto.PublicKey
 
-  @type rsa_digest_type :: :md5 | :ripemd160 | :sha | :sha224 | :sha256 | :sha384 | :sha512
+  @type digest_type :: :sha | :sha224 | :sha256 | :sha384 | :sha512
 
-  @rsa_digest_type_list ~w(md5 ripemd160 sha sha224 sha256 sha384 sha512)a
+  @digest_type_list ~w(sha sha224 sha256 sha384 sha512)a
 
   @moduledoc """
 
@@ -19,14 +19,14 @@ defmodule HmCrypto do
   ## Examples
 
     ```
-    iex> HmCrypto.rsa_digest_types
-    [:md5, :ripemd160, :sha, :sha224, :sha256, :sha384, :sha512]
+    iex> HmCrypto.digest_types
+    [:sha, :sha224, :sha256, :sha384, :sha512]
     ```
 
   """
 
-  @spec rsa_digest_types() :: [rsa_digest_type()]
-  def rsa_digest_types, do: @rsa_digest_type_list
+  @spec digest_types() :: [digest_type()]
+  def digest_types, do: @digest_type_list
 
   @doc """
 
@@ -42,10 +42,10 @@ defmodule HmCrypto do
 
   """
 
-  @spec sign!(binary(), rsa_digest_type(), HmCrypto.PublicKey.key()) :: binary()
+  @spec sign!(binary(), digest_type(), HmCrypto.PublicKey.key()) :: binary()
   def sign!(payload, digest_type, private_key)
       when is_binary(payload) and
-             digest_type in @rsa_digest_type_list do
+             digest_type in @digest_type_list do
     payload
     |> :public_key.sign(digest_type, parse_pem(private_key))
     |> Base.encode64()
@@ -66,11 +66,11 @@ defmodule HmCrypto do
 
   """
 
-  @spec valid?(binary(), binary(), rsa_digest_type(), HmCrypto.PublicKey.key()) :: boolean()
+  @spec valid?(binary(), binary(), digest_type(), HmCrypto.PublicKey.key()) :: boolean()
   def valid?(payload, encoded_signature, digest_type, public_key)
       when is_binary(payload) and
              is_binary(encoded_signature) and
-             digest_type in @rsa_digest_type_list do
+             digest_type in @digest_type_list do
     encoded_signature
     |> Base.decode64(ignore: :whitespace)
     |> case do

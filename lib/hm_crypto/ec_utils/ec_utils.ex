@@ -62,7 +62,11 @@ defmodule HmCrypto.EcUtils do
       iex> {public, private} = HmCrypto.EcUtils.generate_keypair(:secp256k1)
       iex> HmCrypto.EcUtils.crypto_privkey_to_der(private, public, :secp256k1)
   """
-  @spec crypto_privkey_to_der(crypto_privkey :: binary(), crypto_pubkey :: binary(), curve :: atom()) ::
+  @spec crypto_privkey_to_der(
+          crypto_privkey :: binary(),
+          crypto_pubkey :: binary(),
+          curve :: atom()
+        ) ::
           binary()
   def crypto_privkey_to_der(crypto_privkey, crypto_pubkey, curve) do
     key_info =
@@ -166,5 +170,60 @@ defmodule HmCrypto.EcUtils do
       parameters: {:namedCurve, :pubkey_cert_records.namedCurves(crypto_curve)},
       publicKey: crypto_pubkey
     )
+  end
+
+  @doc """
+    Extracts public key from private key and represents it as tuple.
+
+    ## Examples
+
+      iex> {public, private} = HmCrypto.EcUtils.generate_keypair(:secp256k1)
+      iex> ec_privkey = HmCrypto.EcUtils.crypto_secret_to_ec_private_key(private, :secp256k1, public)
+      iex> HmCrypto.EcUtils.public_key_from_private_key(ec_privkey)
+      iex> ec_privkey_pem = HmCrypto.EcUtils.encode_pem(ec_privkey)
+      iex> HmCrypto.EcUtils.public_key_from_private_key(ec_privkey_pem)
+
+  """
+
+  @spec public_key_from_private_key(EcPrivateKey.t() | String.t()) :: EcPoint.t()
+  def public_key_from_private_key(
+        ECPrivateKey.record(publicKey: public_key, parameters: parameters)
+      ) do
+    {ECPoint.record(point: public_key), parameters}
+  end
+
+  def public_key_from_private_key(private_key) when is_binary(private_key) do
+    private_key
+    |> HmCrypto.PublicKey.parse_pem()
+    |> public_key_from_private_key()
+  end
+
+  @doc """
+    Function encodes tuple representation of EC key to PEM format (string).
+    If string is given as argument - returns it as is.
+
+    ## Examples
+      iex> {public, private} = HmCrypto.EcUtils.generate_keypair(:secp256k1)
+      iex> ec_privkey = HmCrypto.EcUtils.crypto_secret_to_ec_private_key(private, :secp256k1, public)
+      iex> ec_pubkey = HmCrypto.EcUtils.public_key_from_private_key(ec_privkey)
+      iex> HmCrypto.EcUtils.encode_pem(ec_privkey)
+      iex> pubkey_pem = HmCrypto.EcUtils.encode_pem(ec_pubkey)
+      iex> HmCrypto.EcUtils.encode_pem(pubkey_pem)
+  """
+
+  @spec encode_pem(ECPrivateKey.t() | ECPoint.t() | String.t()) :: String.t()
+  def encode_pem(ECPrivateKey.record() = ec_key) do
+    to_pem(ECPrivateKey.key_type(), ec_key)
+  end
+
+  def encode_pem({ECPoint.record(), _} = ec_key) do
+    to_pem(ECPoint.key_type(), ec_key)
+  end
+
+  def encode_pem(ec_key) when is_binary(ec_key), do: ec_key
+
+  defp to_pem(key_type, ec_key) do
+    pem_entry = [:public_key.pem_entry_encode(key_type, ec_key)]
+    :public_key.pem_encode(pem_entry)
   end
 end

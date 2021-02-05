@@ -185,7 +185,7 @@ defmodule HmCrypto.EcUtils do
 
   """
 
-  @spec public_key_from_private_key(EcPrivateKey.t() | String.t()) :: EcPoint.t()
+  @spec public_key_from_private_key(ECPrivateKey.t() | String.t()) :: ec_point
   def public_key_from_private_key(
         ECPrivateKey.record(publicKey: public_key, parameters: parameters)
       ) do
@@ -211,7 +211,7 @@ defmodule HmCrypto.EcUtils do
       iex> HmCrypto.EcUtils.encode_pem(pubkey_pem)
   """
 
-  @spec encode_pem(ECPrivateKey.t() | ECPoint.t() | String.t()) :: String.t()
+  @spec encode_pem(ECPrivateKey.t() | ec_point | String.t()) :: String.t()
   def encode_pem(ECPrivateKey.record() = ec_key) do
     to_pem(ECPrivateKey.key_type(), ec_key)
   end

@@ -180,19 +180,28 @@ defmodule HmCrypto.EcUtils do
       iex> {public, private} = HmCrypto.EcUtils.generate_keypair(:secp256k1)
       iex> ec_privkey = HmCrypto.EcUtils.crypto_secret_to_ec_private_key(private, :secp256k1, public)
       iex> HmCrypto.EcUtils.public_key_from_private_key(ec_privkey)
-      iex> ec_privkey_pem = HmCrypto.EcUtils.encode_pem(ec_privkey)
-      iex> HmCrypto.EcUtils.public_key_from_private_key(ec_privkey_pem)
-
   """
 
-  @spec public_key_from_private_key(ECPrivateKey.t() | String.t()) :: ec_point
+  @spec public_key_from_private_key(ECPrivateKey.t()) :: ec_point
   def public_key_from_private_key(
         ECPrivateKey.record(publicKey: public_key, parameters: parameters)
       ) do
     {ECPoint.record(point: public_key), parameters}
   end
 
-  def public_key_from_private_key(private_key) when is_binary(private_key) do
+   @doc """
+    Extracts public key from private key pem and represents it as tuple.
+
+    ## Examples
+
+      iex> {public, private} = HmCrypto.EcUtils.generate_keypair(:secp256k1)
+      iex> ec_privkey = HmCrypto.EcUtils.crypto_secret_to_ec_private_key(private, :secp256k1, public)
+      iex> ec_privkey_pem = HmCrypto.EcUtils.encode_pem(ec_privkey)
+      iex> HmCrypto.EcUtils.public_key_from_private_key_pem(ec_privkey_pem)
+  """
+
+  @spec public_key_from_private_key_pem(String.t()) :: ec_point
+  def public_key_from_private_key_pem(private_key) when is_binary(private_key) do
     private_key
     |> HmCrypto.PublicKey.parse_pem()
     |> public_key_from_private_key()

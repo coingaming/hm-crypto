@@ -42,7 +42,7 @@ defmodule HmCrypto do
 
   """
 
-  @spec sign!(binary(), digest_type(), HmCrypto.PublicKey.key()) :: binary()
+  @spec sign!(binary(), digest_type(), HmCrypto.PrivateKey.key()) :: binary()
   def sign!(payload, digest_type, private_key)
       when is_binary(payload) and
              digest_type in @digest_type_list do

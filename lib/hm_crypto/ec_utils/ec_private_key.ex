@@ -1,5 +1,9 @@
 defmodule HmCrypto.EcUtils.ECPrivateKey do
   require Record
+  @key_type :ECPrivateKey
+
+  @spec key_type :: :ECPrivateKey
+  defmacro key_type, do: @key_type
 
   Record.defrecord(
     :record,

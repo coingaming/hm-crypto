@@ -30,7 +30,7 @@ defmodule HmCrypto.Bench.Helper do
     public_keys =
       fetch_keys(".pub")
 
-    HmCrypto.rsa_digest_types
+    HmCrypto.digest_types
     |> Enum.flat_map(fn(digest_type) ->
         private_keys
         |> Enum.flat_map(fn({key_bits_qty, private_key}) ->

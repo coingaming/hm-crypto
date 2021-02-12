@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.3.0](https://github.com/coingaming/hm-crypto/tree/v0.3.0) (2021-02-12)
+
+[Full Changelog](https://github.com/coingaming/hm-crypto/compare/v0.2.2...v0.3.0)
+
+**Merged pull requests:**
+
+- Extend ecutils [\#10](https://github.com/coingaming/hm-crypto/pull/10) ([oleg-kiviljov](https://github.com/oleg-kiviljov))
+
+## [v0.2.2](https://github.com/coingaming/hm-crypto/tree/v0.2.2) (2020-12-14)
+
+[Full Changelog](https://github.com/coingaming/hm-crypto/compare/v0.2.1...v0.2.2)
+
 ## [v0.2.1](https://github.com/coingaming/hm-crypto/tree/v0.2.1) (2020-12-08)
 
 [Full Changelog](https://github.com/coingaming/hm-crypto/compare/v0.2.0...v0.2.1)
@@ -16,7 +28,6 @@
 
 - Fix CircleCI build [\#8](https://github.com/coingaming/hm-crypto/pull/8) ([ischepin](https://github.com/ischepin))
 - Add EC keys util functions [\#7](https://github.com/coingaming/hm-crypto/pull/7) ([ischepin](https://github.com/ischepin))
-- rework config [\#3](https://github.com/coingaming/hm-crypto/pull/3) ([timCF](https://github.com/timCF))
 
 ## [v0.1.3](https://github.com/coingaming/hm-crypto/tree/v0.1.3) (2018-05-15)
 
@@ -31,6 +42,7 @@
 - Refactor [\#6](https://github.com/coingaming/hm-crypto/pull/6) ([tim2CF](https://github.com/tim2CF))
 - add some benchmarks [\#5](https://github.com/coingaming/hm-crypto/pull/5) ([tim2CF](https://github.com/tim2CF))
 - IH-524 Bugfix, validate sign with whitespaces [\#4](https://github.com/coingaming/hm-crypto/pull/4) ([nazipov](https://github.com/nazipov))
+- rework config [\#3](https://github.com/coingaming/hm-crypto/pull/3) ([timCF](https://github.com/timCF))
 
 ## [v0.1.1](https://github.com/coingaming/hm-crypto/tree/v0.1.1) (2017-11-09)
 

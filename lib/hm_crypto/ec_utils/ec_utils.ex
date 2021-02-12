@@ -54,6 +54,22 @@ defmodule HmCrypto.EcUtils do
   end
 
   @doc """
+    Convert :crypto representation of EC public key (binary) to pem encoded representation (binary).
+    Curve must be provided explicitly since :crypto key format doesn't carry this information.
+
+    ## Examples
+
+      iex> {public, _} = HmCrypto.EcUtils.generate_keypair(:secp256k1)
+      iex> HmCrypto.EcUtils.crypto_pubkey_to_pem(public, :secp256r1)
+  """
+  @spec crypto_pubkey_to_pem(crypto_pubkey :: binary(), crypto_curve :: crypto_curve()) ::
+          String.t()
+  def crypto_pubkey_to_pem(crypto_pubkey, crypto_curve) do
+    crypto_public_to_ec_point(crypto_pubkey, crypto_curve)
+    |> encode_pem()
+  end
+
+  @doc """
     Convert :crypto representation of EC private key (binary) to der encoded representation (binary).
     Curve must be provided explicitly since :crypto key format doesn't carry this information.
 
@@ -98,6 +114,23 @@ defmodule HmCrypto.EcUtils do
     ) = :public_key.der_decode(:SubjectPublicKeyInfo, der_pubkey)
 
     {:namedCurve, named_curve} = :public_key.der_decode(:EcpkParameters, ecpk_params)
+    {crypto_pubkey, :pubkey_cert_records.namedCurves(named_curve)}
+  end
+
+  @doc """
+    Convert PEM representation of EC public key (binary) to :crypto encoded representation {binary, curve_type}.
+
+    ## Examples
+
+      iex> {public, _private} = HmCrypto.EcUtils.generate_keypair(:secp256k1)
+      iex> pem_pk = HmCrypto.EcUtils.crypto_pubkey_to_pem(public, :secp256r1)
+      iex> {^public, _} = HmCrypto.EcUtils.pem_to_crypto_pubkey(pem_pk)
+  """
+
+  def pem_to_crypto_pubkey(pem_pubkey) do
+    {ECPoint.record(point: crypto_pubkey), {:namedCurve, named_curve}} =
+      HmCrypto.PublicKey.parse_pem(pem_pubkey)
+
     {crypto_pubkey, :pubkey_cert_records.namedCurves(named_curve)}
   end
 
@@ -173,6 +206,23 @@ defmodule HmCrypto.EcUtils do
   end
 
   @doc """
+    Convert :crypto public key representation (binary) to ECPoint record used by :public_key module
+
+    ## Examples
+
+      iex> {public_key, _} = HmCrypto.EcUtils.generate_keypair(:secp256k1)
+      iex> HmCrypto.EcUtils.crypto_public_to_ec_point(public_key, :secp256k1)
+  """
+  @spec crypto_public_to_ec_point(
+          crypto_pubkey :: binary(),
+          crypto_curve :: crypto_curve()
+        ) :: ec_point()
+  def crypto_public_to_ec_point(crypto_pubkey, crypto_curve) do
+    {ECPoint.record(point: crypto_pubkey),
+     {:namedCurve, :pubkey_cert_records.namedCurves(crypto_curve)}}
+  end
+
+  @doc """
     Extracts public key from private key and represents it as tuple.
 
     ## Examples
@@ -189,7 +239,7 @@ defmodule HmCrypto.EcUtils do
     {ECPoint.record(point: public_key), parameters}
   end
 
-   @doc """
+  @doc """
     Extracts public key from private key pem and represents it as tuple.
 
     ## Examples

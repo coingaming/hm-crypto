@@ -16,8 +16,8 @@ defmodule HmCrypto.EcUtils do
 
     ## Examples
 
-      iex> {public, private} = HmCrypto.EcUtils.generate_keypair()
-      iex> {public, private} = HmCrypto.EcUtils.generate_keypair(:secp256k1)
+      iex> {_public, _private} = HmCrypto.EcUtils.generate_keypair()
+      iex> {_public, _private} = HmCrypto.EcUtils.generate_keypair(:secp256k1)
   """
   @spec generate_keypair(curve_type :: crypto_curve()) ::
           {public_key :: binary(), private_key :: binary()}
@@ -141,7 +141,7 @@ defmodule HmCrypto.EcUtils do
     ## Examples
 
       iex> {public, _private} = HmCrypto.EcUtils.generate_keypair(:secp256k1)
-      iex> {x, y} = HmCrypto.EcUtils.crypto_pubkey_to_points(public)
+      iex> {_x, _y} = HmCrypto.EcUtils.crypto_pubkey_to_points(public)
   """
   @spec crypto_pubkey_to_points(pk_bin :: binary()) :: {x :: binary(), y :: binary}
   def crypto_pubkey_to_points(pk_bin) do

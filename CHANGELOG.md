@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.3.2](https://github.com/coingaming/hm-crypto/tree/v0.3.1) (2024-03-19)
+
+[Full Changelog](https://github.com/coingaming/hm-crypto/compare/v0.3.1...v0.3.2)
+
 ## [v0.3.1](https://github.com/coingaming/hm-crypto/tree/v0.3.1) (2023-08-09)
 
 [Full Changelog](https://github.com/coingaming/hm-crypto/compare/v0.3.0...v0.3.1)

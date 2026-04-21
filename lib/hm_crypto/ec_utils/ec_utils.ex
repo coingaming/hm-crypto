@@ -7,6 +7,12 @@ defmodule HmCrypto.EcUtils do
   # Defined in public_key/include/OTP-PUB-KEY.hrl, no proper way to extract erlang -define values
   @id_ec_public_key {1, 2, 840, 10_045, 2, 1}
 
+  # OTP 28 switched :public_key to PKIXAlgs-2009, which strictly types
+  # AlgorithmIdentifier.parameters per algorithm OID. For id-ecPublicKey it
+  # now expects the typed CHOICE tuple {:namedCurve, oid}. On OTP <28 the
+  # field is ANY and the caller must pre-encode it to a DER binary.
+  @otp_release System.otp_release() |> String.to_integer()
+
   @type crypto_curve :: :secp256k1 | :secp256r1
 
   @type ec_point :: {ECPoint.t(), any()}
@@ -37,17 +43,14 @@ defmodule HmCrypto.EcUtils do
   @spec crypto_pubkey_to_der(crypto_pubkey :: binary(), crypto_curve :: crypto_curve()) ::
           binary()
   def crypto_pubkey_to_der(crypto_pubkey, crypto_curve) do
-    ecpk_params =
-      :public_key.der_encode(
-        :EcpkParameters,
-        {:namedCurve, :pubkey_cert_records.namedCurves(crypto_curve)}
-      )
-
     pk_info =
       SubjectPublicKeyInfo.record(
         subjectPublicKey: crypto_pubkey,
         algorithm:
-          AlgorithmIdentifier.record(algorithm: @id_ec_public_key, parameters: ecpk_params)
+          AlgorithmIdentifier.record(
+            algorithm: @id_ec_public_key,
+            parameters: encode_ecpk_params(crypto_curve)
+          )
       )
 
     :public_key.der_encode(:SubjectPublicKeyInfo, pk_info)
@@ -113,7 +116,7 @@ defmodule HmCrypto.EcUtils do
       algorithm: AlgorithmIdentifier.record(parameters: ecpk_params)
     ) = :public_key.der_decode(:SubjectPublicKeyInfo, der_pubkey)
 
-    {:namedCurve, named_curve} = :public_key.der_decode(:EcpkParameters, ecpk_params)
+    {:namedCurve, named_curve} = decode_ecpk_params(ecpk_params)
     {crypto_pubkey, :pubkey_cert_records.namedCurves(named_curve)}
   end
 
@@ -179,8 +182,7 @@ defmodule HmCrypto.EcUtils do
       subjectPublicKey: public_key
     ) = :public_key.der_decode(:SubjectPublicKeyInfo, der_pk)
 
-    named_curve = :public_key.der_decode(:EcpkParameters, ecpk_params)
-    {ECPoint.record(point: public_key), named_curve}
+    {ECPoint.record(point: public_key), decode_ecpk_params(ecpk_params)}
   end
 
   @doc """
@@ -284,5 +286,25 @@ defmodule HmCrypto.EcUtils do
   defp to_pem(key_type, ec_key) do
     pem_entry = [:public_key.pem_entry_encode(key_type, ec_key)]
     :public_key.pem_encode(pem_entry)
+  end
+
+  # OTP >=28 returns ECParameters already decoded as a typed CHOICE tuple
+  # (e.g. {:namedCurve, oid}) via PKIXAlgs-2009. Older OTP versions returned
+  # a raw DER binary that still needed decoding.
+  defp decode_ecpk_params(ecpk_params) when is_binary(ecpk_params),
+    do: :public_key.der_decode(:EcpkParameters, ecpk_params)
+
+  defp decode_ecpk_params(ecpk_params) when is_tuple(ecpk_params), do: ecpk_params
+
+  if @otp_release >= 28 do
+    defp encode_ecpk_params(crypto_curve),
+      do: {:namedCurve, :pubkey_cert_records.namedCurves(crypto_curve)}
+  else
+    defp encode_ecpk_params(crypto_curve),
+      do:
+        :public_key.der_encode(
+          :EcpkParameters,
+          {:namedCurve, :pubkey_cert_records.namedCurves(crypto_curve)}
+        )
   end
 end

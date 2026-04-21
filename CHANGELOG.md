@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.3.3](https://github.com/coingaming/hm-crypto/tree/v0.3.3) (2026-04-21)
+
+[Full Changelog](https://github.com/coingaming/hm-crypto/compare/v0.3.2...v0.3.3)
+
+**Fixed:**
+
+- OTP 28 compatibility for EC public key DER encoding/decoding, preserving OTP 27 support. OTP 28 switched `:public_key` to the PKIXAlgs-2009 ASN.1 module, which strictly types `AlgorithmIdentifier.parameters` per algorithm OID instead of treating it as `ANY`. `crypto_pubkey_to_der/2` now selects the correct `parameters` form at compile time based on `System.otp_release/0` — the typed `{:namedCurve, oid}` tuple on OTP 28+, a pre-encoded `EcpkParameters` DER binary on OTP <28. `der_to_crypto_pubkey/1` and `der_pubkey_to_ec_point/1` accept both forms on decode.
+
 ## [v0.3.2](https://github.com/coingaming/hm-crypto/tree/v0.3.1) (2024-03-19)
 
 [Full Changelog](https://github.com/coingaming/hm-crypto/compare/v0.3.1...v0.3.2)

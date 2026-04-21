@@ -1,6 +1,6 @@
 defmodule HmCrypto.RsaUtils do
-  alias HmCrypto.RsaUtils.{RsaPublicKey, RsaPrivateKey}
-  require HmCrypto.RsaUtils.{RsaPublicKey, RsaPrivateKey}
+  alias HmCrypto.RsaUtils.{RsaPrivateKey, RsaPublicKey}
+  require HmCrypto.RsaUtils.{RsaPrivateKey, RsaPublicKey}
 
   @doc """
 

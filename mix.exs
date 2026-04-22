@@ -29,8 +29,8 @@ defmodule HmCrypto.Mixfile do
       ],
       # ex_doc
       name: "HmCrypto",
-      source_url: "https://github.com/heathmont/hm-crypto",
-      homepage_url: "https://github.com/heathmont/hm-crypto",
+      source_url: "https://github.com/coingaming/hm-crypto",
+      homepage_url: "https://github.com/coingaming/hm-crypto",
       docs: [main: "readme", extras: ["README.md"]],
       # hex.pm stuff
       description: "Elixir library for signing and validating requests",
@@ -40,9 +40,38 @@ defmodule HmCrypto.Mixfile do
         files: ["lib", "priv", "mix.exs", "README*", "VERSION*"],
         maintainers: ["tim2CF", "nazipov", "ysemeniuk"],
         links: %{
-          "GitHub" => "https://github.com/heathmont/hm-crypto"
+          "GitHub" => "https://github.com/coingaming/hm-crypto"
         }
       ]
+    ]
+  end
+
+  def cli do
+    [
+      coveralls: :test,
+      "coveralls.travis": :test,
+      "coveralls.circle": :test,
+      "coveralls.semaphore": :test,
+      "coveralls.post": :test,
+      "coveralls.detail": :test,
+      "coveralls.html": :test
+    ]
+  end
+
+  def package do
+    [
+      name: "hm_crypto",
+      source_url: "https://github.com/coingaming/hm-crypto",
+      homepage_url: "https://github.com/coingaming/hm-crypto",
+      docs: [main: "readme", extras: ["README.md"]],
+      description: "Elixir library for signing and validating requests",
+      licenses: ["Apache 2.0"],
+      organization: "coingaming",
+      files: ["lib", "priv", "mix.exs", "README*", "VERSION*"],
+      maintainers: ["tim2CF", "nazipov", "ysemeniuk"],
+      links: %{
+        "GitHub" => "https://github.com/coingaming/hm-crypto"
+      }
     ]
   end
 
@@ -61,7 +90,7 @@ defmodule HmCrypto.Mixfile do
       {:benchfella, "~> 0.3.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.13", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.23", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.40", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:boilex, "~> 0.2.1", only: [:dev, :test], runtime: false}
     ]

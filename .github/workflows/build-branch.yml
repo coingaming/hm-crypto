@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Test, Credo & Dialyzer
     steps:
       - uses: actions/checkout@v6
@@ -60,7 +60,7 @@ jobs:
 
   doc:
     needs: [test]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Build Documentation
     steps:
       - uses: actions/checkout@v6
@@ -100,7 +100,7 @@ jobs:
 
   semantic-release:
     needs: [test, doc]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Semantic Release
     permissions:
       contents: write

@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: heathmont/elixir-ci:1.10.2-alpine
+      credentials:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_TOKEN }}
     name: Test, Credo & Dialyzer
     steps:
       - uses: actions/checkout@v6
@@ -67,6 +70,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: heathmont/elixir-ci:1.10.2-alpine
+      credentials:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_TOKEN }}
     name: Build Documentation
     steps:
       - uses: actions/checkout@v6

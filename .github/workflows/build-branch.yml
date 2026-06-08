@@ -21,19 +21,9 @@ jobs:
         uses: erlef/setup-beam@v1
         with:
           elixir-version: "1.10.2"
-          otp-version: "22"
+          otp-version: "23"
 
       - name: Cache deps and _build
-        uses: actions/cache@v4
-        with:
-          path: |
-            deps
-            _build
-            ~/.mix
-          key: ${{ runner.os }}-mix-${{ hashFiles('mix.lock') }}
-          restore-keys: ${{ runner.os }}-mix-
-
-      - name: Cache dialyzer PLTs
         uses: actions/cache@v4
         with:
           path: plts
@@ -79,7 +69,7 @@ jobs:
         uses: erlef/setup-beam@v1
         with:
           elixir-version: "1.10.2"
-          otp-version: "22"
+          otp-version: "23"
 
       - name: Cache deps and _build
         uses: actions/cache@v4

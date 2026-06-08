@@ -44,7 +44,9 @@ jobs:
         run: mix local.hex --force
 
       - name: Authorize hex organization
-        run: mix hex.organization auth coingaming --key ${{ secrets.HEX_ORGANIZATION_COINGAMING_KEY }}
+        run: mix hex.organization auth coingaming --key "$HEX_ORG_KEY"
+        env:
+          HEX_ORG_KEY: ${{ secrets.HEX_ORGANIZATION_COINGAMING_KEY }}
 
       - name: Fetch dependencies
         run: mix deps.get
@@ -95,7 +97,9 @@ jobs:
           mix local.rebar --force
 
       - name: Authorize hex organization
-        run: mix hex.organization auth coingaming --key ${{ secrets.HEX_ORGANIZATION_COINGAMING_KEY }}
+        run: mix hex.organization auth coingaming --key "$HEX_ORG_KEY"
+        env:
+          HEX_ORG_KEY: ${{ secrets.HEX_ORGANIZATION_COINGAMING_KEY }}
 
       - name: Fetch dependencies
         run: mix deps.get

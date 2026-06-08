@@ -17,18 +17,17 @@ jobs:
         steps:
             - uses: actions/checkout@v6
 
-            - name: Setup SSH agent
+            - name: Setup robot SSH key
               run: |
-                  eval $(ssh-agent -s)
-                  echo "${{ secrets.ROBOT_SSH_KEY }}" | base64 --decode | ssh-add -
-                  echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> $GITHUB_ENV
-                  echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> $GITHUB_ENV
-
-            - name: Add GitHub SSH known hosts
-              run: |
-                  mkdir -p ~/.ssh
+                  mkdir -p ~/.ssh/
+                  echo "${{ secrets.ROBOT_SSH_KEY }}" | base64 -d > ~/.ssh/id_rsa.robot
+                  chmod 600 ~/.ssh/id_rsa.robot
                   ssh-keyscan -p 443 ssh.github.com >> ~/.ssh/known_hosts
                   ssh-keyscan github.com >> ~/.ssh/known_hosts
+                  eval $(ssh-agent -s)
+                  ssh-add ~/.ssh/id_rsa.robot
+                  echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> $GITHUB_ENV
+                  echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> $GITHUB_ENV
 
             - name: Fetch submodules
               run: git submodule update --init --recursive
@@ -91,18 +90,17 @@ jobs:
         steps:
             - uses: actions/checkout@v6
 
-            - name: Setup SSH agent
+            - name: Setup robot SSH key
               run: |
-                  eval $(ssh-agent -s)
-                  echo "${{ secrets.ROBOT_SSH_KEY }}" | base64 --decode | ssh-add -
-                  echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> $GITHUB_ENV
-                  echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> $GITHUB_ENV
-
-            - name: Add GitHub SSH known hosts
-              run: |
-                  mkdir -p ~/.ssh
+                  mkdir -p ~/.ssh/
+                  echo "${{ secrets.ROBOT_SSH_KEY }}" | base64 -d > ~/.ssh/id_rsa.robot
+                  chmod 600 ~/.ssh/id_rsa.robot
                   ssh-keyscan -p 443 ssh.github.com >> ~/.ssh/known_hosts
                   ssh-keyscan github.com >> ~/.ssh/known_hosts
+                  eval $(ssh-agent -s)
+                  ssh-add ~/.ssh/id_rsa.robot
+                  echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> $GITHUB_ENV
+                  echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> $GITHUB_ENV
 
             - name: Fetch submodules
               run: git submodule update --init --recursive

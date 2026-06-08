@@ -1,0 +1,163 @@
+name: Build Branch
+
+on:
+    push:
+        branches:
+            - master
+            - gha-migration
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        name: Test, Credo & Dialyzer
+        steps:
+            - uses: actions/checkout@v6
+
+            - name: Setup SSH agent
+              run: |
+                  eval $(ssh-agent -s)
+                  echo "${{ secrets.ROBOT_SSH_KEY }}" | base64 --decode | ssh-add -
+                  echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> $GITHUB_ENV
+                  echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> $GITHUB_ENV
+
+            - name: Add GitHub SSH known hosts
+              run: |
+                  mkdir -p ~/.ssh
+                  ssh-keyscan -p 443 ssh.github.com >> ~/.ssh/known_hosts
+                  ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+            - name: Fetch submodules
+              run: git submodule update --init --recursive
+
+            - name: Setup Elixir
+              uses: erlef/setup-beam@v1
+              with:
+                  elixir-version: "1.10.2"
+                  otp-version: "22"
+
+            - name: Cache deps and _build
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      deps
+                      _build
+                      ~/.mix
+                  key: ${{ runner.os }}-mix-${{ hashFiles('mix.lock') }}
+                  restore-keys: ${{ runner.os }}-mix-
+
+            - name: Cache dialyzer PLTs
+              uses: actions/cache@v4
+              with:
+                  path: plts
+                  key: ${{ runner.os }}-dialyzer-${{ hashFiles('mix.lock') }}
+                  restore-keys: ${{ runner.os }}-dialyzer-
+
+            - name: Install hex and rebar
+              run: |
+                  mix local.hex --force
+                  mix local.rebar --force
+
+            - name: Authorize hex organization
+              run: mix hex.organization auth coingaming --key ${{ secrets.HEX_ORGANIZATION_COINGAMING_KEY }}
+
+            - name: Fetch dependencies
+              run: mix deps.get
+
+            - name: Compile dependencies
+              run: mix deps.compile
+
+            - name: Compile protocols
+              run: mix compile.protocols --warnings-as-errors
+
+            - name: Run tests
+              run: mix coveralls
+              env:
+                  MIX_ENV: test
+
+            - name: Run style checks
+              run: mix credo --strict
+
+            - name: Run Dialyzer type checks
+              run: mix dialyzer --halt-exit-status
+
+    doc:
+        needs: [test]
+        runs-on: ubuntu-latest
+        name: Build Documentation
+        steps:
+            - uses: actions/checkout@v6
+
+            - name: Setup SSH agent
+              run: |
+                  eval $(ssh-agent -s)
+                  echo "${{ secrets.ROBOT_SSH_KEY }}" | base64 --decode | ssh-add -
+                  echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> $GITHUB_ENV
+                  echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> $GITHUB_ENV
+
+            - name: Add GitHub SSH known hosts
+              run: |
+                  mkdir -p ~/.ssh
+                  ssh-keyscan -p 443 ssh.github.com >> ~/.ssh/known_hosts
+                  ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+            - name: Fetch submodules
+              run: git submodule update --init --recursive
+
+            - name: Setup Elixir
+              uses: erlef/setup-beam@v1
+              with:
+                  elixir-version: "1.10.2"
+                  otp-version: "22"
+
+            - name: Cache deps and _build
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      deps
+                      _build
+                      ~/.mix
+                  key: ${{ runner.os }}-mix-${{ hashFiles('mix.lock') }}
+                  restore-keys: ${{ runner.os }}-mix-
+
+            - name: Install hex and rebar
+              run: |
+                  mix local.hex --force
+                  mix local.rebar --force
+
+            - name: Authorize hex organization
+              run: mix hex.organization auth coingaming --key ${{ secrets.HEX_ORGANIZATION_COINGAMING_KEY }}
+
+            - name: Fetch dependencies
+              run: mix deps.get
+
+            - name: Compile protocols
+              run: mix compile.protocols --warnings-as-errors
+
+            - name: Compile documentation
+              run: mix docs
+
+    semantic-release:
+        needs: [test, doc]
+        runs-on: ubuntu-latest
+        name: Semantic Release
+        permissions:
+            contents: write
+            issues: write
+            pull-requests: write
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+
+            - name: Run semantic release
+              run: npx semantic-release@24
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

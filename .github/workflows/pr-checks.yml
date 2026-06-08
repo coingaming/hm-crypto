@@ -3,7 +3,6 @@ name: Pull Request Checks
 on:
   pull_request:
     branches: ["master"]
-  push:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}

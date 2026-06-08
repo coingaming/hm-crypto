@@ -14,15 +14,16 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    container:
-      image: heathmont/elixir-ci:1.10.2-alpine
-      credentials:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_TOKEN }}
+    runs-on: ubuntu-20.04
     name: Test, Credo & Dialyzer
     steps:
       - uses: actions/checkout@v6
+
+      - name: Setup Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: "1.10.2"
+          otp-version: "23"
 
       - name: Cache deps and _build
         uses: actions/cache@v4
@@ -41,8 +42,10 @@ jobs:
           key: ${{ runner.os }}-dialyzer-${{ hashFiles('mix.lock') }}
           restore-keys: ${{ runner.os }}-dialyzer-
 
-      - name: Install hex
-        run: mix local.hex --force
+      - name: Install hex and rebar
+        run: |
+          mix local.hex --force
+          mix local.rebar --force
 
       - name: Authorize hex organization
         run: mix hex.organization auth coingaming --key ${{ secrets.HEX_ORGANIZATION_COINGAMING_KEY }}
